@@ -10,6 +10,10 @@ public class Job1Processor implements ItemProcessor<String,String> {
 
     @Override
     public String process(String s) throws Exception {
-        return s.toUpperCase();
+        for (int i = 0; i < 10; i++) {
+            System.out.println(i);
+            return s.toUpperCase();
+        }
+        return null;
     }
 }

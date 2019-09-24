@@ -1,5 +1,7 @@
 package com.zed.springbatchdemo.job2.reader;
 
+import com.zed.springbatchdemo.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -13,24 +15,30 @@ import java.util.List;
  * @author Zeluo
  * @date 2019/9/24 9:28
  */
-public class DataAnaylzeReader implements ItemReader<String> {
+@Slf4j
+public class DataAnaylzeReader implements ItemReader<String[]> {
 
-    private static final String FILEPATH = "D:\\workspace-commons\\log_api.log";
+//    private static final String FILEPATH = "D:\\workspace-commons\\log_api.log";
+
+    private static final String PATH = "D:\\workspace-commons\\logs";
+
+    private static final ArrayList<String> files = FileUtils.getFiles(PATH);
 
     private int count = 0;
     @Override
-    public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        String[] strings = this.readContentLine();
-        if (count < strings.length)
-            return strings[count++];
-        else
-            count = 0;
-        return null;
+    public String[] read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+
+        if (count < files.size()) {
+            String[] strings = readContentLine(files.get(count++));
+            return strings;
+        } else
+            return null;
     }
 
-    private String[] readContentLine() throws IOException {
+    private String[] readContentLine(String filePath) throws IOException {
+        log.info("[读取日志文件-开始] 读取日志文件开始***************************************");
         List<String> list = new ArrayList<>();
-        FileInputStream inputStream = new FileInputStream(FILEPATH);
+        FileInputStream inputStream = new FileInputStream(filePath);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String str = null;
         while ((str = bufferedReader.readLine()) != null) {
@@ -38,6 +46,7 @@ public class DataAnaylzeReader implements ItemReader<String> {
         }
         inputStream.close();
         bufferedReader.close();
+        log.info("[读取日志文件-结束] 读取日志文件结束***************************************");
         return list.toArray(new String[list.size()]);
     }
 }

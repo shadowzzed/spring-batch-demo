@@ -4,6 +4,7 @@ import com.zed.springbatchdemo.job2.listener.Job2Listener;
 import com.zed.springbatchdemo.job2.model.LogData;
 import com.zed.springbatchdemo.job2.processor.Job2Processor;
 import com.zed.springbatchdemo.job2.reader.DataAnaylzeReader;
+import com.zed.springbatchdemo.job2.writer.Job2HandleWriter;
 import com.zed.springbatchdemo.job2.writer.Job2Writer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -39,12 +40,12 @@ public class Job2Config {
                 .build();
     }
     @Bean
-    public Step orderStep2(@Qualifier("logWriter") JpaItemWriter<LogData> logDataJpaItemWriter) {
+    public Step orderStep2() {
         return stepBuilderFactory.get("dataAnalyzeStep1")
-                .<String, LogData>chunk(50)
+                .<String[], LogData[]>chunk(1)
                 .reader(new DataAnaylzeReader())
                 .processor(new Job2Processor())
-                .writer(logDataJpaItemWriter)
+                .writer(new Job2HandleWriter())
                 .build();
     }
 }
