@@ -1,11 +1,9 @@
 package com.zed.springbatchdemo.job2.model;
 
 import lombok.Data;
+import org.springframework.core.annotation.Order;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author Zeluo
@@ -13,15 +11,13 @@ import javax.persistence.Id;
  */
 @Entity
 @Data
+@Table(name = "log_data")
+@Order(1)
 public class LogData {
     @Id
-    @Column(name = "id")
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    @Column(name = "request_id",nullable = true)
     private String requestId;
-    @Column(name = "request_params",nullable = true)
     private String requestParams;
-    @Column
     private String responseParams;
 }
