@@ -4,18 +4,12 @@ import com.zed.springbatchdemo.job2.listener.Job2Listener;
 import com.zed.springbatchdemo.job2.model.LogData;
 import com.zed.springbatchdemo.job2.processor.Job2Processor;
 import com.zed.springbatchdemo.job2.reader.DataAnaylzeReader;
-import com.zed.springbatchdemo.job2.rep.LogDataRepository;
-import com.zed.springbatchdemo.job2.writer.Job2HandleWriter;
-import com.zed.springbatchdemo.job2.writer.Job2Writer;
-import com.zed.springbatchdemo.job2.writer.Job2Writer2;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +28,6 @@ public class Job2Config {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    LogDataRepository repository;
     @Bean
     public Job processJob2(@Qualifier("orderStep2") Step orderStep) {
         return jobBuilderFactory.get("dataAnalyze")

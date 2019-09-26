@@ -1,12 +1,9 @@
 package com.zed.springbatchdemo.job2.writer;
 
 import com.zed.springbatchdemo.job2.model.LogData;
-import com.zed.springbatchdemo.job2.rep.LogDataRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -23,13 +20,11 @@ import java.util.List;
 @Slf4j
 public class Job2Writer2 implements ItemWriter<LogData[]> {
 
-    private LogDataRepository repository;
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public Job2Writer2(JdbcTemplate jdbcTemplate, LogDataRepository logDataRepository) {
-        this.repository = logDataRepository;
+    public Job2Writer2(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
