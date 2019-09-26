@@ -12,4 +12,4 @@
 # 分支说明
 * master分支练习了如何去使用spring-batch
 * mess-process 将job2的chunk重新构筑了一次，每次读取一个文本的全部信息存到数组中然后批处理
-* final分支 完善job2，比job2更加成熟
+* final分支 完善job2，比mess-process分支更加成熟
