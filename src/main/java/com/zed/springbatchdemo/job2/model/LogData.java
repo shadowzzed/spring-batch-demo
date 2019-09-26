@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "log_data")
-@Order(1)
 public class LogData {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

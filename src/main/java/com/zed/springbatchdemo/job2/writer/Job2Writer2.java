@@ -7,9 +7,12 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,7 +21,6 @@ import java.util.List;
  */
 @Component
 @Slf4j
-@Order(3)
 public class Job2Writer2 implements ItemWriter<LogData[]> {
 
     private LogDataRepository repository;
@@ -26,20 +28,36 @@ public class Job2Writer2 implements ItemWriter<LogData[]> {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public Job2Writer2(JdbcTemplate jdbcTemplate) {
+    public Job2Writer2(JdbcTemplate jdbcTemplate, LogDataRepository logDataRepository) {
+        this.repository = logDataRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
     private final String INSERT_SQL = "INSERT INTO log_data (request_id,request_params,response_params) values (?,?,?)";
 
+    private int count = 1;
     @Override
     public void write(List<? extends LogData[]> items) throws Exception {
-        log.info("插入数据************************************");
+        log.info("第{}次插入数据************************************",count++);
         LogData[] logDatas = items.get(0);
-        for (LogData logData: logDatas) {
-            log.info(logData.toString());
-            int update = jdbcTemplate.update(INSERT_SQL, logData.getRequestId(), logData.getRequestParams(), logData.getResponseParams());
-            log.info("{}",update);
-        }
+        jdbcTemplate.batchUpdate(INSERT_SQL, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                preparedStatement.setString(1,logDatas[i].getRequestId());
+                preparedStatement.setString(2,logDatas[i].getRequestParams());
+                preparedStatement.setString(3,logDatas[i].getResponseParams());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return logDatas.length;
+            }
+        });
+//        for (LogData logData: logDatas) {
+//            log.info("第{}次运行write",count++);
+//            jdbcTemplate.update(INSERT_SQL, logData.getRequestId(), logData.getRequestParams(), logData.getResponseParams());
+////            repository.save(logData);
+////            log.info("{}",update);
+//        }
     }
 }

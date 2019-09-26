@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
  * @date 2019/9/24 10:31
  */
 @Repository
-@Order(2)
 public interface LogDataRepository extends JpaRepository<LogData,Integer> {
 
 }

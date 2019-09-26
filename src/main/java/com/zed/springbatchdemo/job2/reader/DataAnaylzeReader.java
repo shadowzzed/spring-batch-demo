@@ -24,10 +24,11 @@ public class DataAnaylzeReader implements ItemReader<String[]> {
 
     private static final ArrayList<String> files = FileUtils.getFiles(PATH);
 
-    private int count = 0;
+    private int count = 1;
     @Override
     public String[] read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 
+        log.info("第{}次运行read",count);
         if (count < files.size()) {
             String[] strings = readContentLine(files.get(count++));
             return strings;
