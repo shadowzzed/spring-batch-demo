@@ -2,10 +2,8 @@ package com.zed.springbatchdemo.hbase;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CompareOperator;
-import org.apache.hadoop.hbase.TableExistsException;
-import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
@@ -21,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableMap;
+import java.util.concurrent.TimeUnit;
 
 @DependsOn("hbaseConfig")
 @Component
@@ -95,12 +94,14 @@ public class HBaseClient {
 	 */
 	public void insertOrUpdate(String tableName, String rowKey, String columnFamily, String[] columns, String[] values)
 			throws IOException {
+		List<Put> list = new ArrayList<>();
 		Table table = connection.getTable(TableName.valueOf(tableName));
 		Put put = new Put(Bytes.toBytes(rowKey));
 		for (int i = 0; i < columns.length; i++) {
 			put.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(columns[i]), Bytes.toBytes(values[i]));
-			table.put(put);
+			list.add(put);
 		}
+		table.put(list);
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class DataAnaylzeReader implements ItemReader<String[]> {
 
     private static final ArrayList<String> files = FileUtils.getFiles(PATH);
 
-    private int count = 1;
+    private int count = 0;
     @Override
     public String[] read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 

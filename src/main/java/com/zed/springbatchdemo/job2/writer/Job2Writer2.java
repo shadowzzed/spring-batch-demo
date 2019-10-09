@@ -60,12 +60,11 @@ public class Job2Writer2 implements ItemWriter<LogData[]> {
 //        });
         LogData[] logData = items.get(0);
         for (LogData data:logData) {
-            log.info("第{}次插入数据************************************",count++);
-            hBaseClient.insertOrUpdate(TABLE_NAME,count.toString(),COLUMN_FAMILY,REQUEST_ID,data.getRequestId());
+            count++;
             if (data.getRequestParams()!=null)
-                hBaseClient.insertOrUpdate(TABLE_NAME,count.toString(),COLUMN_FAMILY,REQUEST_PARAMS,data.getRequestParams());
+                hBaseClient.insertOrUpdate(TABLE_NAME,count.toString(),COLUMN_FAMILY,new String[]{REQUEST_ID,REQUEST_PARAMS},new String[]{data.getRequestId(),data.getRequestParams()});
             else
-                hBaseClient.insertOrUpdate(TABLE_NAME,count.toString(),COLUMN_FAMILY,RESPONSE_PARAMS,data.getResponseParams());
+                hBaseClient.insertOrUpdate(TABLE_NAME,count.toString(),COLUMN_FAMILY,new String[]{REQUEST_ID,RESPONSE_PARAMS},new String[]{data.getRequestId(),data.getResponseParams()});
         }
 
 
