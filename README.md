@@ -1,3 +1,7 @@
+
+# hbase版本代码迁移至另一个代码库spring-batch-hbase
+后续更新将会在那个库，这个库就不用了
+
 # spring-batch-demo
 学习并且尝试使用spring-batch分析日志写入数据库
 
